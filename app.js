@@ -26,15 +26,18 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('db connected!')
+  // db.collections.pokemons.createIndex( { name: "text" } )
 });
 
 // Routes
-const indexRouter = require('./routes/index');
-const pokeScript = require('./routes/pokescript');
+const indexRouter = require('./routes/index')
+const pokeScript = require('./routes/pokescript')
 const fetchPokemons = require('./routes/fetchPokemons')
+const filterPokemons = require('./routes/filterPokemons')
 
 app.use('/api/', indexRouter);
 app.use('/api/fetchpokemons', fetchPokemons)
-app.use('/api/pokescript', pokeScript);
+app.use('/api/filterpokemons', filterPokemons)
+app.use('/api/pokescript', pokeScript)
 
 module.exports = app;

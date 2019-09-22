@@ -4,27 +4,33 @@ const fetch = require('node-fetch');
 const Pokemon = require('../schemas/Pokemon.js');
 
 router.get('/', function(req, res, next) {
+  // Block pokeScript from being used again
+  return res.send('Nope')
+
   let counter = 1;
 
   const fetchPokemon = () => {
     if (counter > 151) {
       clearInterval(intervalID)
       console.log('ALL DONE')
+      res.end()
       return
     }
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${counter}`)
     .then(res => res.json())
     .then((pokemon) => {
+      pokemon.types = pokemon.types.map(el => el.type.name).reverse()
       const newPokemon = new Pokemon(pokemon)
-      newPokemon.save(err => {
-        if (err) {
-          console.error(err)
-          clearInterval(intervalID)
-          return
-        }
-      })
+      // newPokemon.save(err => {
+      //   if (err) {
+      //     console.error(err)
+      //     clearInterval(intervalID)
+      //     return
+      //   }
+      // })
       console.log(`${pokemon.name} added`);
+      console.log(newPokemon)
       counter++
     })
     .catch(err => {
@@ -32,7 +38,7 @@ router.get('/', function(req, res, next) {
       clearInterval(intervalID)
     })
   }
-  const intervalID = setInterval(fetchPokemon, 1000)
+  const intervalID = setInterval(fetchPokemon, 1500)
 });
 
 module.exports = router;
