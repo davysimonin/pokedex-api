@@ -16,7 +16,7 @@ router.post('/', async (req, res, next) => {
     physical.forEach(filter => (physicalFilter[filter] = -1))
   }
   if (types.length) {
-    typesFilter = { types: { $in: types } }
+    typesFilter = { types: { $all: types } }
   }
   const findQuery = {...searchFilter, ...typesFilter}
   console.log(findQuery)
