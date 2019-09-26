@@ -1,16 +1,16 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 const Pokemon = require('../schemas/Pokemon')
 
 router.post('/', async (req, res, next) => {
-  let query;
-  let physicalFilter = {};
-  let typesFilter = {};
+  const physicalFilter = {}
+  let typesFilter = {}
   let searchFilter = ''
-  const { search, types, physical } = req.body.filters
+  const statsFilter = {}
+  const { search, types, physical, stats } = req.body.filters
 
   if (search.length) {
-    searchFilter = { $text: { $search: search } }
+    searchFilter = { name: { $regex: search, $options: 'i' } }
   }
   if (physical.length) {
     physical.forEach(filter => (physicalFilter[filter] = -1))
@@ -18,12 +18,20 @@ router.post('/', async (req, res, next) => {
   if (types.length) {
     typesFilter = { types: { $all: types } }
   }
-  const findQuery = {...searchFilter, ...typesFilter}
-  console.log(findQuery)
-  query = Pokemon.find(findQuery).sort(physicalFilter)
+  if (stats.length) {
+    stats.forEach((stat) => {
+      statsFilter[stat] = -1
+    })
+  }
+  // const nextUrl = `api/fetchpokemons?skip=${skipParam + limitParam}&limit=${limitParam}`
+
+  const findQuery = { ...searchFilter, ...typesFilter }
+  const sortQuery = { ...statsFilter, ...physicalFilter }
+
+  const query = Pokemon.find(findQuery).sort(sortQuery)
 
   const response = await query.exec()
   res.json(response)
-});
+})
 
-module.exports = router;
+module.exports = router
