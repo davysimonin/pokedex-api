@@ -3,12 +3,12 @@ const router = express.Router()
 const Pokemon = require('../schemas/Pokemon')
 
 router.post('/', async (req, res, next) => {
+  console.log(req.body)
   const physicalFilter = {}
   let typesFilter = {}
   let searchFilter = ''
   const statsFilter = {}
-  const { search, types, physical, stats } = req.body.filters
-
+  const { search, types, physical, stats } = req.body
   if (search.length) {
     searchFilter = { name: { $regex: search, $options: 'i' } }
   }
