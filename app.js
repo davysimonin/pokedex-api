@@ -1,12 +1,13 @@
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const morgan = require('morgan')
-const cors = require('cors')
+
 // Config
 app.use(express.json())
-app.use(cors())
 app.use(morgan('dev'))
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -14,9 +15,13 @@ mongoose.connect(process.env.MONGODB_URI, {
   useCreateIndex: true
 })
 
-// const db = mongoose.connection
-// db.on('error', console.error.bind(console, 'connection error:'))
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
 // db.once('open', () => console.log('db connected!'))
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Headers': process.env.CORS_URL')
+  next();
+});
 
 // Routes
 const indexRouter = require('./routes/index')
