@@ -18,8 +18,13 @@ mongoose.connect(process.env.MONGODB_URI, {
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
 // db.once('open', () => console.log('db connected!'))
+
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Headers': process.env.CORS_URL')
+  res.set({
+    'Access-Control-Allow-Origin': process.env.CORS_URL,
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+    'Access-Control-Allow-Headers': 'Authorization, Content-Type'
+  })
   next();
 });
 
