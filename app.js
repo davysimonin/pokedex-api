@@ -32,9 +32,11 @@ app.use((req, res, next) => {
 const indexRouter = require('./routes/index')
 const fetchPokemons = require('./routes/fetchPokemons')
 const filterPokemons = require('./routes/filterPokemons')
+const pokescript = require('./routes/pokescript')
 
 app.use('/api/index', indexRouter)
 app.use('/api/fetchpokemons', fetchPokemons)
 app.use('/api/filterpokemons', filterPokemons)
+app.use('/api/pokescript', pokescript)
 
 module.exports = app

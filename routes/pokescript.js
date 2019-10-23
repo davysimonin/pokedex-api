@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.get('/', (req, res) => {
   // Block pokeScript from being used again
-  return res.send('Nope')
+  return res.send('Pokescript is unavailable')
 
   // let counter = 152
   //

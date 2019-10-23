@@ -3,11 +3,13 @@ const router = express.Router()
 const Pokemon = require('../schemas/Pokemon')
 
 router.post('/', async (req, res, next) => {
-  console.log(req.body)
   const physicalFilter = {}
   let typesFilter = {}
   let searchFilter = ''
   const statsFilter = {}
+  if (Object.entrtypesies(req.body).length === 0) {
+    return res.json({message: "The body parameters are empty"})
+  }
   const { search, types, physical, stats } = req.body
   if (search.length) {
     searchFilter = { name: { $regex: search, $options: 'i' } }
